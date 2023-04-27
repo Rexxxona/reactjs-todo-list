@@ -1,24 +1,105 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+
+function TaskItem({ task, onDelete, onToggle }) {
+  return (
+      <div>
+        <h3 style={{ textDecoration: task.completed ? 'line-through' : '' }}>
+          {task.description}
+        </h3>
+        <p>Due Date: {task.dueDate}</p>
+        <p>Priority: {task.priority}</p>
+        <button onClick={() => onToggle(task.id)}>
+          {task.completed ? 'Undo' : 'Complete'}
+        </button>
+        <button onClick={() => onDelete(task.id)}>Delete</button>
+      </div>
+  );
+}
+
+function TaskList({ tasks, onDelete, onToggle }) {
+  return (
+      <div>
+        {tasks.map((task) => (
+            <TaskItem
+                key={task.id}
+                task={task}
+                onDelete={onDelete}
+                onToggle={onToggle}
+            />
+        ))}
+      </div>
+  );
+}
+
+function TaskForm({ onAdd }) {
+  const [description, setDescription] = useState('');
+  const [dueDate, setDueDate] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!description.trim() || !dueDate.trim()) {
+      return;
+    }
+    onAdd(description, dueDate);
+    setDescription('');
+    setDueDate('');
+  };
+
+  return (
+      <form onSubmit={handleSubmit}>
+        <input
+            type="text"
+            placeholder="Add task"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+        />
+        <input
+            type="date"
+            placeholder="Due date"
+            value={dueDate}
+            onChange={(e) => setDueDate(e.target.value)}
+        />
+        <button type="submit">Add</button>
+      </form>
+  );
+}
 
 function App() {
+  const [tasks, setTasks] = useState([]);
+
+  const handleAddTask = (description, dueDate) => {
+    const newTask = {
+      id: Math.random(),
+      description: description,
+      dueDate: dueDate,
+      priority: 'low',
+      completed: false,
+    };
+    setTasks([...tasks, newTask]);
+  };
+
+  const handleDeleteTask = (id) => {
+    setTasks(tasks.filter((task) => task.id !== id));
+  };
+
+  const handleToggleTask = (id) => {
+    setTasks(
+        tasks.map((task) =>
+            task.id === id ? { ...task, completed: !task.completed } : task
+        )
+    );
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <div>
+        <h1>To-Do List</h1>
+        <TaskForm onAdd={handleAddTask} />
+        <TaskList
+            tasks={tasks}
+            onDelete={handleDeleteTask}
+            onToggle={handleToggleTask}
+        />
+      </div>
   );
 }
 

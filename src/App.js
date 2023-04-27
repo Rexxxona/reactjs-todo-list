@@ -9,9 +9,9 @@ function TaskItem({ task, onDelete, onToggle }) {
         <p>Due Date: {task.dueDate}</p>
         <p>Priority: {task.priority}</p>
         <button onClick={() => onToggle(task.id)}>
-          {task.completed ? 'Undo' : 'Complete'}
+          {task.completed ? 'Undo' : 'Završeno'}
         </button>
-        <button onClick={() => onDelete(task.id)}>Delete</button>
+        <button onClick={() => onDelete(task.id)}>Izbriši</button>
       </div>
   );
 }
@@ -49,7 +49,7 @@ function TaskForm({ onAdd }) {
       <form onSubmit={handleSubmit}>
         <input
             type="text"
-            placeholder="Add task"
+            placeholder="Dodaj zadatak"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
         />

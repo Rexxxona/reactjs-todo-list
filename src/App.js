@@ -6,8 +6,7 @@ function TaskItem({ task, onDelete, onToggle }) {
         <h3 style={{ textDecoration: task.completed ? 'line-through' : '' }}>
           {task.description}
         </h3>
-        <p>Due Date: {task.dueDate}</p>
-        <p>Priority: {task.priority}</p>
+        <p>Važi do: {task.dueDate}</p>
         <button onClick={() => onToggle(task.id)}>
           {task.completed ? 'Undo' : 'Završeno'}
         </button>
@@ -55,11 +54,11 @@ function TaskForm({ onAdd }) {
         />
         <input
             type="date"
-            placeholder="Due date"
+            placeholder="Do"
             value={dueDate}
             onChange={(e) => setDueDate(e.target.value)}
         />
-        <button type="submit">Add</button>
+        <button type="submit">Dodaj</button>
       </form>
   );
 }
@@ -72,7 +71,6 @@ function App() {
       id: Math.random(),
       description: description,
       dueDate: dueDate,
-      priority: 'low',
       completed: false,
     };
     setTasks([...tasks, newTask]);
@@ -92,7 +90,7 @@ function App() {
 
   return (
       <div>
-        <h1>To-Do List</h1>
+        <h1>To-Do Lista</h1>
         <TaskForm onAdd={handleAddTask} />
         <TaskList
             tasks={tasks}
